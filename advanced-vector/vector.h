@@ -234,6 +234,7 @@ public:
 
     template <typename... Args>
     iterator Emplace(const_iterator pos, Args&&... args) {
+        assert(pos >= begin() && pos <= end());
         size_t offset = pos - begin();
         if (size_ < data_.Capacity()) { 
             if (pos == end()) {
@@ -278,11 +279,13 @@ public:
     }
 
     void PopBack() noexcept {
+        assert(size_ != 0);
         std::destroy_n(end() - 1, 1);
         --size_;
     }
 
     iterator Erase(const_iterator pos) noexcept {
+        assert(pos >= begin() && pos < end());
         if (size_ != 0) {
             size_t offset = pos - begin();
             std::move(begin() + offset + 1, end(), begin() + offset);
